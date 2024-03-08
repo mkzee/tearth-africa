@@ -4,9 +4,7 @@ import validator from "validator"
 
 const userSchema = new mongoose.Schema({
   userName: {
-    type: String,
-    required: true,
-    unique: [true, '{VALUE} is already taken']
+    type: String
   },
   email: {
     type: String,
@@ -17,7 +15,8 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required']
+    required: [true, 'Password is required'],
+    select: false
   }
 })
 
@@ -26,6 +25,10 @@ userSchema.pre('save', async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12)
   next()
+})
+
+userSchema.method('comparePassword', async function (submittedPassword, storedPassword) {
+  return bcrypt.compare(submittedPassword, storedPassword)
 })
 
 const User = mongoose.model('User', userSchema)

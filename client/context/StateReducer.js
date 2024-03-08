@@ -2,7 +2,8 @@ import { reducerCases } from "./constants";
 
 export const initialState = {
     showLoginModal: false,
-    showSignUpModal: true
+    showSignUpModal: true,
+    userInfo: undefined
 } 
 
 const reducer = (state, action) => {
@@ -16,6 +17,17 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 showSignUpModal: action.showSignUpModal
+            };
+        case reducerCases.CLOSE_AUTH_MODAL:
+            return {
+                ...state,
+                showLoginModal: false,
+                showSignUpModal: false
+            }
+        case reducerCases.SET_USER: 
+            return {
+                ...state,
+                userInfo: action.userInfo
             }
         default:
             return state;
