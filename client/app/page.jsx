@@ -1,21 +1,20 @@
 "use client"
 
-import Nav from "@components/Nav"
-import Herobanner from "@components/Herobanner"
-import Authwrapper from "@components/modal/Authwrapper"
-import { useStateProvider } from "@context/StateContext"
+import Nav from "@components/navbar"
+import Homepage from "@components/Homepage"
+import { StateProvider } from '@context/StateContext'
+import reducer, { initialState } from '@context/StateReducer'
 
 
 const Home = () => {
-    const [{ showLoginModal, showSignUpModal}] = useStateProvider()
-
     return (
         <div>
-            <Nav />
-            <Herobanner />
-            {
-                (showLoginModal || showSignUpModal) && (<Authwrapper type={showLoginModal ? "login" : "signup"}/>)
-            }
+            <StateProvider initialState={initialState} reducer={reducer}>
+                <Nav></Nav>
+                <div  className="mb-auto mx-auto w-full">
+                    <Homepage />
+                </div>
+            </StateProvider>  
         </div>
     )
 }

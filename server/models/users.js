@@ -3,9 +3,6 @@ import bcrypt from "bcryptjs"
 import validator from "validator"
 
 const userSchema = new mongoose.Schema({
-  userName: {
-    type: String
-  },
   email: {
     type: String,
     required: [ true, 'Please enter a valid email address' ],
@@ -17,6 +14,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
     select: false
+  },
+  username: {
+    type: String,
   }
 })
 

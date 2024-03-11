@@ -25,7 +25,7 @@ function Authwrapper({type}) {
                     { email, password },
                     { withCredentials:true }
                 )
-                setCookies("token", token)
+                setCookies("token", {token})
                 dispatch({type: reducerCases.CLOSE_AUTH_MODAL})
                 if (user) {
                     dispatch({

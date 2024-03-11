@@ -25,8 +25,6 @@ const signUp = asyncWrapper(async (req, res) => {
 const login = asyncWrapper(async (req, res, next) => {
     const {email, password} = req.body
 
-    console.log({email, password})
-
     if (!email || !password) {
         const error = new Error('Please provide an email or password');
         return  next(error)
@@ -54,7 +52,12 @@ const login = asyncWrapper(async (req, res, next) => {
     })
 })
 
+const getUserInfo = asyncWrapper(async (req, res) => {
+
+})
+
 export default {
     signUp,
-    login
+    login,
+    getUserInfo
 }
