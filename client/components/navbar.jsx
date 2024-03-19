@@ -26,7 +26,7 @@ const Nav = ({onLoad}) => {
                     if (user.image) {
                         projectedUser = {
                             ...projectedUser,
-                            imageName: HOST + "/" + user.image
+                            imageName: HOST + "/" + user.profileImage
                         }
                         delete projectedUser.image
                     }

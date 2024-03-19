@@ -1,15 +1,52 @@
 "use client"
 
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { useStateProvider } from '@context/StateContext'
-import Image from 'next/image'
+import React from 'react';
+import {
+    HOST,
+    IMAGES_URL,
+    SET_USER_IMAGE,
+    SET_USER_INFO,
+  } from "@utils/constants";
+import { useState, useEffect } from 'react';
+import { useStateProvider } from '@context/StateContext';
+import { useRouter } from "next/router";
+import Image from 'next/image';
+import { FaCommentsDollar } from 'react-icons/fa';
 
 const profile = () => {
     const [ errorMessage, setErrorMessage ] = useState("")
     const [ imageHover, setImageHover ] = useState(false)
     const [ image, setImage ] = useState(undefined)
     const [{ userInfo }, dispatch] = useStateProvider();
+    const [ data, setData ] = useState({
+        userName: "",
+        fullName: "",
+        description: ""
+    })
+
+    useEffect(() => {
+        const handleData = data
+        if (userInfo?.userName) handleData.userName = userInfo?.userName;
+        if (userInfo?.description) handleData.description = userInfo?.description;
+        if (userInfo?.fullName) handleData.fullName = userInfo?.fullName;
+        console.log(userInfo)
+
+        
+        if (userInfo?.imageName) {
+            const fileName = image;
+            fetch(userInfo.imageName).then(async (response) => {
+                const contentType = response.headers.get("content-type");
+                const blob = await response.blob();
+                // @ts-ignore
+                const files = new File([blob], fileName, { contentType });
+                // @ts-ignore
+                setImage(files);
+            })
+
+            setData(handleData);
+            setIsLoaded(true);
+        }
+    }, [userInfo])
 
     
     const handleFile = (e) => {
@@ -21,7 +58,26 @@ const profile = () => {
         }
     }
 
+    const handleChange = (e) => {
+        setData({ ...data, [e.target.name]: e.target.value });
+      };
 
+    const setProfile = async () => {
+        try {
+            const response = await axios.post(
+                SET_USER_INFO,
+                { ...data },
+                { withCredentials: true }
+            );
+
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const inputClassName = "block p-4 text-sm text-gray-900 border w-full border-gray-300 rounded-lg bg-gray-50  focus:ring-blue-500 focus:border-blue-500";
+    const labelClassName = "mb-2 text-lg font-medium text-gray-900  text-tearthblack";
 
     return (
         <div className="flex flex-col items-center justify-start min-h-[80vh] gap-3 text-tearthblack p-[30px]">
@@ -35,11 +91,13 @@ const profile = () => {
             
             <div className="flex flex-col items-center w-full gap-5">
                 <div
-                    className="flex justify-between rounded-sm items-center cursor-pointer w-[60%] border border-slate-300"
-                    onMouseEnter={() => setImageHover(true)}
-                    onMouseLeave={() => setImageHover(false)}
+                    className="flex justify-between rounded-sm items-center w-[55%] border border-slate-300"
                 >
-                    <div className="bg-tearthgreen m-[20px] h-20 w-20 flex items-center justify-center rounded-full relative">
+                    <div 
+                        className="bg-tearthgreen m-[20px] cursor-pointer h-20 w-20 flex items-center justify-center rounded-full relative"
+                        onMouseEnter={() => setImageHover(true)}
+                        onMouseLeave={() => setImageHover(false)}
+                    >
                         {image ? (
                             <Image
                                 src={URL.createObjectURL(image)}
@@ -90,6 +148,58 @@ const profile = () => {
                     >
                         Select image
                     </label>
+                </div>
+                <div className=' w-[55%]'>
+                    <div className="w-full mb-[20px]">
+                        <label className={labelClassName} htmlFor="userName">
+                            Username
+                        </label>
+                        <input
+                            className={inputClassName}
+                            type="text"
+                            name="userName"
+                            id="userName"
+                            placeholder="Username"
+                            value={data.userName}
+                              onChange={handleChange}
+                        />
+                    </div>
+                    <div className="w-full mb-[20px]">
+                        <label className={labelClassName} htmlFor="fullName">
+                            Full Name
+                        </label>
+                        <input
+                            className={inputClassName}
+                            type="text"
+                            name="fullName"
+                            id="fullName"
+                            placeholder="Full Name"
+                            value={data.fullName}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="flex flex-col w-full mb-[20px]">
+                        <label className={labelClassName} htmlFor="description">
+                            Description
+                        </label>
+                        <textarea
+                            name="description"
+                            id="description"
+                            value={data.description}
+                            onChange={handleChange}
+                            className={inputClassName}
+                            placeholder="description"
+                        ></textarea>
+                    </div>
+                    <div className='w-full flex justify-center'>
+                        <button
+                            className="border text-lg font-semibold px-5 py-3 border-[#1DBF73] bg-[#1DBF73] text-white rounded-md"
+                            type="button"
+                            onClick={setProfile}
+                        >
+                            Set Profile
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

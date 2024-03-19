@@ -59,8 +59,14 @@ const getUserInfo = asyncWrapper(async (req, res) => {
     }
 })
 
+
+const setUserInfo = asyncWrapper(async (req, res) => {
+    console.log(req.body)
+})
+
 export default {
     signUp,
     login,
-    getUserInfo
+    getUserInfo,
+    setUserInfo
 }

@@ -15,9 +15,18 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     select: false
   },
-  username: {
+  userName: {
     type: String,
   },
+  profileImage: {
+    type: String,
+  },
+  fullName: {
+    type: String
+  },
+  description: {
+    type: String
+  }
   
 })
 
