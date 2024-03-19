@@ -7,8 +7,11 @@ const verifyToken = (req, res, next) => {
     if (!token) return (res.status(401).json({message: "You are not authorized"}))
 
     jwt.verify(token.token, process.env.SECRET_STR, async (err, payload) => {
-        if (err) return res.status(403).json({message: "Token is not valid"}) 
-        
+        if (err) {
+            console.log(err)
+            return res.status(403).json({message: "Token is not valid"})
+        } 
+
         req.userId = payload?.id
     })
     next()

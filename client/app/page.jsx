@@ -1,21 +1,31 @@
-"use client"
+// "use client"
 
-import Nav from "@components/navbar"
 import Homepage from "@components/Homepage"
-import { StateProvider } from '@context/StateContext'
-import reducer, { initialState } from '@context/StateReducer'
 
+export const metadata = {
+    title: "Tearth Africa",
+    description: "Dare to Dream"
+}
+// import { useState, useEffect } from "react"
+// import { StateProvider } from "@context/StateContext"
+// import reducer, {initialState} from "@context/StateReducer"
 
 const Home = () => {
+    // const [isLoaded, setIsLoaded] = useState(false)
+
+    const handleSetIsLoaded = (value) => {
+        // setIsLoaded(value)
+    } 
+
     return (
-        <div>
-            <StateProvider initialState={initialState} reducer={reducer}>
-                <Nav></Nav>
-                <div  className="mb-auto mx-auto w-full">
+        // <StateProvider initialState={initialState} reducer={reducer}>
+            <div>
+                {/* {isLoaded &&  */}
+                <div className="mb-auto mx-auto w-full">
                     <Homepage />
                 </div>
-            </StateProvider>  
-        </div>
+            </div>
+        // </StateProvider> 
     )
 }
 

@@ -53,7 +53,10 @@ const login = asyncWrapper(async (req, res, next) => {
 })
 
 const getUserInfo = asyncWrapper(async (req, res) => {
-
+    if (req.userId) {
+        const user = await User.findById(req.userId)
+        res.status(200).json({user})
+    }
 })
 
 export default {
